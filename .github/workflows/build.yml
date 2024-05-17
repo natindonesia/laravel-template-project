@@ -56,7 +56,7 @@ jobs:
       - name: Start MySQL
         run: sudo systemctl start mysql.service
       - name: Create Database
-        run: mysql -u root --password="root" -e "CREATE DATABASE IF NOT EXISTS berani_learning_web;"
+        run: mysql -u root --password="root" -e "CREATE DATABASE IF NOT EXISTS berani_base_architect;"
       - name: Generate key
         run: php artisan key:generate
       - name: Migrate Database
