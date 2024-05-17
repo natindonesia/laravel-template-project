@@ -1,0 +1,136 @@
+name: Laravel Test Build Release
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  laravel-tests-build-release:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: '8.3'
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Cache composer
+        uses: actions/cache@v3.3.2
+        id: composer-cache
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - name: Cache npm dependencies
+        uses: actions/cache@v2
+        id: npm-cache
+        with:
+          path: 'node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-node-modules-
+      - name: Cache npm home
+        uses: actions/cache@v2
+        id: npm-home
+        with:
+          path: '~/.npm'
+          key: ${{ runner.os }}-npm-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-home-
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.ci', '.env');"
+      - name: Install Dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+      - name: Start MySQL
+        run: sudo systemctl start mysql.service
+      - name: Create Database
+        run: mysql -u root --password="root" -e "CREATE DATABASE IF NOT EXISTS berani_learning_web;"
+      - name: Generate key
+        run: php artisan key:generate
+      - name: Migrate Database
+        run: php artisan migrate --seed
+      - name: Migration Must Pass Double Refresh
+        run: |
+          php artisan migrate:refresh --seed
+          php artisan migrate:refresh --seed
+      - name: NPM Install
+        if: steps.npm-cache.outputs.cache-hit != 'true' || steps.npm-home.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Build with Vite
+        run: npm run build
+
+      - name: Execute tests (Unit and Feature tests) via Pest
+        run: php artisan test
+
+      - name: Get current branch name
+        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
+        id: branch-name
+      - name: Get current date
+        run: echo "date=$(TZ='Asia/Bangkok' date '+%Y-%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
+        id: date
+      - name: Get current commit message
+        run: echo "commit=$(git log --format=%B -n 1)" >> $GITHUB_OUTPUT
+        id: commit
+      - name: Get current commit hash
+        run: echo "commit_hash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+        id: commit_hash
+      - name: Remove env file
+        run: rm .env
+      - name: Compress source code
+        run: zip -r "${{ github.event.repository.name }}.zip" .
+
+      - name: Upload built file
+        uses: actions/upload-artifact@v2
+        with:
+          name: "${{ github.event.repository.name }}.zip"
+          path: "${{ github.event.repository.name }}.zip"
+
+      - name: Remove Old Release Drafts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases \
+          | tr '\r\n' ' ' \
+          | jq '.[] | select(.draft == true) | .id' \
+          | xargs -I '{}' \
+          curl -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases/{}
+
+      # Create new release draft - which is not publicly visible and requires manual acceptance
+      - name: Create Release Draft
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          #write it by yourself, not worth automating it
+          #no, not here on the GitHub Draft Release
+          tag_name: "Snapshot"
+          # branch-date
+          release_name: "${{ steps.branch-name.outputs.branch }} - ${{ steps.date.outputs.date }}"
+          # Commit name
+          body: "Snapshot of ${{ steps.branch-name.outputs.branch }} - ${{ steps.date.outputs.date }} \n\n Commit Message: `${{ steps.commit.outputs.commit }}` \n\n ${{ steps.commit.outputs.commit_hash }}"
+          draft: true
+
+      #upload to release
+      - name: Upload
+        id: upload-release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: "${{ github.event.repository.name }}.zip"
+          asset_name: "${{ github.event.repository.name }}.zip"
+          asset_content_type: application/zip

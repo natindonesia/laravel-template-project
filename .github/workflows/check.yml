@@ -1,0 +1,107 @@
+name: Laravel Check
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - master
+  workflow_dispatch:
+
+
+jobs:
+  laravel-tests:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: '8.3'
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Cache composer
+        uses: actions/cache@v3.3.2
+        id: composer-cache
+        with:
+          path: vendor-normal
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}-normal
+          restore-keys: |
+            ${{ runner.os }}-composer-normal-
+      - name: Copy cached vendor-normal to vendor
+        if: steps.composer-cache.outputs.cache-hit == 'true'
+        run: cp -r vendor-normal vendor
+      - name: Cache npm dependencies
+        uses: actions/cache@v2
+        id: npm-cache
+        with:
+          path: 'node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-node-modules-
+      - name: Cache npm home
+        uses: actions/cache@v2
+        id: npm-home
+        with:
+          path: '~/.npm'
+          key: ${{ runner.os }}-npm-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-home-
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.ci', '.env');"
+      - name: Install Dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Copy vendor
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: cp -r vendor vendor-normal
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+      - name: Start MySQL
+        run: sudo systemctl start mysql.service
+      - name: Create Database
+        run: mysql -u root --password="root" -e "CREATE DATABASE IF NOT EXISTS berani_learning_web;"
+      - name: Generate key
+        run: php artisan key:generate
+      - name: Migrate Database
+        run: php artisan migrate --seed
+      - name: Migration Must Pass Double Refresh
+        run: |
+          php artisan migrate:refresh --seed
+          php artisan migrate:refresh --seed
+      - name: NPM Install
+        if: steps.npm-cache.outputs.cache-hit != 'true' || steps.npm-home.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Build with Vite
+        run: npm run build
+
+      - name: Execute tests (Unit and Feature tests) via Pest
+        run: php artisan test
+      - name: Clear vendor
+        run: rm -rf vendor
+      - name: Cache composer production
+        uses: actions/cache@v2
+        id: composer-cache-production
+        with:
+          path: vendor-prod
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}-prod
+          restore-keys: |
+            ${{ runner.os }}-composer-prod-
+      - name: Copy vendor-prod to vendor
+        if: steps.composer-cache-production.outputs.cache-hit == 'true'
+        run: cp -r vendor-prod vendor
+      - name: Set environment variables
+        run: echo "APP_ENV=production" >> .env
+      - name: Composer Install Production
+        if: steps.composer-cache-production.outputs.cache-hit != 'true'
+        run: composer install --no-dev
+      - name: Copy vendor to vendor-prod
+        if: steps.composer-cache-production.outputs.cache-hit != 'true'
+        run: cp -r vendor vendor-prod
+      - name: Run optimization
+        run: php artisan optimize
+      - name: Migration Must Pass Double Refresh (Production)
+        run: |
+          php artisan migrate:refresh --seed --force
+          php artisan migrate:refresh --force
