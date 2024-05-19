@@ -40,6 +40,13 @@ FLUSH PRIVILEGES;
     1. `npm run dev` for development
 9. `php artisan storage:link` to link storage and FilePond to work
 
+## Setup CRON jobs
+list of CRON jobs with recommended pattern
+- `php artisan queue:work --once` with the following expression `* * * * *`
+
+Example in CPanel:
+- `/usr/local/bin/php -q /home/user/public_html/exampel.com/artisan queue:work --once`
+
 # Common Commands
 
 ```bash
