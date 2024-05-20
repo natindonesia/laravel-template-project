@@ -40,6 +40,24 @@ FLUSH PRIVILEGES;
     1. `npm run dev` for development
 9. `php artisan storage:link` to link storage and FilePond to work
 
+## CPanel Setup
+
+1. `git clone --recursive `
+2. Add `.htaccess` with permissions 644 to the root project folder
+3. Upload `vendor` folder
+4. Set `.env`
+5. Set project folder permissions to 755
+
+
+## Setup CRON jobs
+list of CRON jobs with recommended pattern
+- `php artisan queue:work --once` with the following expression `* * * * *`
+
+
+
+Example in CPanel:
+- `/usr/local/bin/php -q /home/user/public_html/exampel.com/artisan queue:work --once`
+
 # Common Commands
 
 ```bash
