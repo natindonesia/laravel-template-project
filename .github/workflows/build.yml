@@ -81,7 +81,7 @@ jobs:
         run: echo "date=$(TZ='Asia/Bangkok' date '+%Y-%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
         id: date
       - name: Get current commit message
-        run: echo "commit=$(git log --format=%B -n 1)" >> $GITHUB_OUTPUT
+        run: echo "commit=$(git log --format=%B -n 1 2>/dev/null || echo 'merge')" >> $GITHUB_OUTPUT
         id: commit
       - name: Get current commit hash
         run: echo "commit_hash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
