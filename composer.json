@@ -4,13 +4,25 @@
     "description": "The skeleton application for the Laravel framework.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "library/berani-common-filament-plugin"
+        },
+        {
+            "type": "path",
+            "url": "library/filament-access"
+        }
+    ],
     "require": {
         "php": "^8.2",
         "fakerphp/faker": "^1.23",
         "filament/filament": "^3.2",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
-        "nunomaduro/collision": "^8.0"
+        "nunomaduro/collision": "^8.0",
+        "beranidigital/filament-access": "@dev",
+        "beranidigital/berani-common-filament-plugin": "@dev"
     },
     "require-dev": {
         "laravel/pint": "^1.13",
