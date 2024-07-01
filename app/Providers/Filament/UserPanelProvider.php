@@ -41,7 +41,6 @@ class UserPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
-                TodoStatsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

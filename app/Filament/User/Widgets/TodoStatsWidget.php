@@ -15,4 +15,6 @@ class TodoStatsWidget extends BaseWidget
             Stat::make(__('Total Todos'), $totalTodos),
         ];
     }
+
+
 }
