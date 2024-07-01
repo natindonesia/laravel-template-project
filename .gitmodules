@@ -4,3 +4,6 @@
 [submodule "library/filament-access"]
 	path = library/filament-access
 	url = https://github.com/beranidigital/filament-access
+[submodule "library/laravel-model-audit"]
+	path = library/laravel-model-audit
+	url = https://github.com/beranidigital/laravel-model-audit

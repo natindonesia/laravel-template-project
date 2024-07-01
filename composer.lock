@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "24c2a86ff778c1577d21f6b4c1d7dde4",
+    "content-hash": "3792ef9b635c0db4de75a95c23bc483e",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -78,10 +78,11 @@
             "dist": {
                 "type": "path",
                 "url": "library/filament-access",
-                "reference": "f6d7fdd0325ad82b8cc13ad839466e6756d18acf"
+                "reference": "1f90971531d3e3b029353f3979bf1a4255739222"
             },
             "require": {
                 "filament/filament": "^3.0",
+                "nikic/php-parser": "^5.0",
                 "php": "^8.1",
                 "spatie/laravel-package-tools": "^1.15.0"
             },
@@ -157,6 +158,96 @@
             "support": {
                 "issues": "https://github.com/beranidigital/filament-access/issues",
                 "source": "https://github.com/beranidigital/filament-access"
+            },
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "beranidigital/laravel-model-audit",
+            "version": "dev-main-alt",
+            "dist": {
+                "type": "path",
+                "url": "library/laravel-model-audit",
+                "reference": "dfcb9400ce5899c4c8a9f9ee06f650f1ec43455f"
+            },
+            "require": {
+                "filament/filament": "^3.0",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.9",
+                "nunomaduro/larastan": "^2.0.1",
+                "orchestra/testbench": "^8.0",
+                "pestphp/pest": "^2.1",
+                "pestphp/pest-plugin-arch": "^2.0",
+                "pestphp/pest-plugin-laravel": "^2.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "BeraniDigitalID\\LaravelModelAudit\\LaravelModelAuditServiceProvider"
+                    ],
+                    "aliases": {
+                        "LaravelModelAudit": "BeraniDigitalID\\LaravelModelAudit\\Facades\\LaravelModelAudit"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BeraniDigitalID\\LaravelModelAudit\\": "src/",
+                    "BeraniDigitalID\\LaravelModelAudit\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "BeraniDigitalID\\LaravelModelAudit\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "post-autoload-dump": [
+                    "@php ./vendor/bin/testbench package:discover --ansi"
+                ],
+                "analyse": [
+                    "vendor/bin/phpstan analyse"
+                ],
+                "test": [
+                    "vendor/bin/pest"
+                ],
+                "test-coverage": [
+                    "vendor/bin/pest --coverage"
+                ],
+                "format": [
+                    "vendor/bin/pint"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Yusuf Sekhan Althaf",
+                    "email": "yusuf@beranidigital.id",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This is my package laravel-model-audit",
+            "homepage": "https://github.com/beranidigital/laravel-model-audit",
+            "keywords": [
+                "beranidigital",
+                "laravel",
+                "laravel-model-audit"
+            ],
+            "support": {
+                "issues": "https://github.com/beranidigital/laravel-model-audit/issues",
+                "source": "https://github.com/beranidigital/laravel-model-audit"
             },
             "transport-options": {
                 "relative": true
@@ -10474,7 +10565,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "beranidigital/filament-access": 20
+        "beranidigital/filament-access": 20,
+        "beranidigital/laravel-model-audit": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
