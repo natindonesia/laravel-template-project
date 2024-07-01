@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Todo;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,5 +15,6 @@ class FakeSeeder extends Seeder
     public function run(): void
     {
         User::factory(10)->create();
+        Todo::factory(50)->create();
     }
 }

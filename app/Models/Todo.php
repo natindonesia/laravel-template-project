@@ -13,5 +13,11 @@ class Todo extends Model
         'title',
         'description',
         'status',
+        'user_id'
     ];
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

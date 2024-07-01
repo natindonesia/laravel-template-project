@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\TodoStatus;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,10 +18,12 @@ class TodoFactory extends Factory
      */
     public function definition(): array
     {
+        $user = User::inRandomOrder()->firstOrFail();
         return [
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
             'status' => $this->faker->randomElement(TodoStatus::cases())->value,
+            'user_id' => $user->id,
         ];
     }
 }
