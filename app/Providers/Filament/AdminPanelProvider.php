@@ -2,9 +2,11 @@
 
 namespace App\Providers\Filament;
 
+
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -35,6 +37,19 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
             ->pages([
                 Pages\Dashboard::class,
+            ])
+            ->navigationGroups([
+                'settings' => NavigationGroup::make()
+                    ->label(fn() => __('Settings'))
+                    ->collapsed()
+                    ->icon("heroicon-o-cog"),
+
+            ])
+            ->plugins([
+                \BeraniDigitalID\FilamentModelAudit\FilamentModelAuditPlugin::make()
+                    ->setResourceNavigationGroup('settings')
+                    ->setResourceNavigationIcon(null)
+                    ->setResourceNavigationSort(2)
             ])
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
             ->widgets([

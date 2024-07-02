@@ -7,3 +7,6 @@
 [submodule "library/laravel-model-audit"]
 	path = library/laravel-model-audit
 	url = https://github.com/beranidigital/laravel-model-audit
+[submodule "library/filament-model-audit"]
+	path = library/filament-model-audit
+	url = https://github.com/beranidigital/filament-model-audit

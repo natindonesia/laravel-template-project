@@ -15,7 +15,7 @@
         },
         {
             "type": "path",
-            "url": "library/laravel-model-audit"
+            "url": "library/filament-model-audit"
         }
     ],
     "require": {
@@ -26,7 +26,7 @@
         "laravel/tinker": "^2.9",
         "nunomaduro/collision": "^8.0",
         "beranidigital/filament-access": "@dev",
-        "beranidigital/laravel-model-audit": "@dev"
+        "beranidigital/filament-model-audit": "@dev"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",
