@@ -1,4 +1,4 @@
-name: Laravel Test Build Release
+name: Laravel Test Build Release Update
 
 on:
   push:
@@ -7,7 +7,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read                # 'read' access to repository contents
+  pull-requests: write          # 'write' access to pull requests
 
 jobs:
   laravel-tests-build-release:
@@ -52,6 +53,17 @@ jobs:
       - name: Install Dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Update Composer
+        run: |
+          composer update
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "chore: update composer"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
       - name: Start MySQL
