@@ -27,7 +27,8 @@
         "filament/filament": "^3.2",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
-        "nunomaduro/collision": "^8.0"
+        "nunomaduro/collision": "^8.0",
+        "xlite-dev/filament-impersonate": "^2.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",
