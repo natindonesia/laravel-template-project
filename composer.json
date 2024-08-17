@@ -20,13 +20,14 @@
     ],
     "require": {
         "php": "^8.2",
+        "beranidigital/filament-access": "@dev",
+        "beranidigital/filament-model-audit": "@dev",
+        "bezhansalleh/filament-panel-switch": "^1.0",
         "fakerphp/faker": "^1.23",
         "filament/filament": "^3.2",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
-        "nunomaduro/collision": "^8.0",
-        "beranidigital/filament-access": "@dev",
-        "beranidigital/filament-model-audit": "@dev"
+        "nunomaduro/collision": "^8.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",

@@ -32,6 +32,15 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = [
+        'is_admin',
+    ];
+
+    public function getIsAdminAttribute(): bool
+    {
+        return $this->email === 'admin@localhost';
+    }
+
     /**
      * Get the attributes that should be cast.
      *

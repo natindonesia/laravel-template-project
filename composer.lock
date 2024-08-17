@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8adf413085abeeef3afd4808bb2f36e2",
+    "content-hash": "28382257bbf2cc54d6a06537b3aff96f",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -74,7 +74,7 @@
         },
         {
             "name": "beranidigital/filament-access",
-            "version": "dev-main",
+            "version": "dev-315da4d63138e62ee9f58e5f4257ea0517c5a8f6",
             "dist": {
                 "type": "path",
                 "url": "library/filament-access",
@@ -165,7 +165,7 @@
         },
         {
             "name": "beranidigital/filament-model-audit",
-            "version": "dev-main",
+            "version": "0.1",
             "dist": {
                 "type": "path",
                 "url": "library/filament-model-audit",
@@ -331,6 +331,84 @@
                 }
             ],
             "time": "2024-07-01T15:35:47+00:00"
+        },
+        {
+            "name": "bezhansalleh/filament-panel-switch",
+            "version": "1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bezhanSalleh/filament-panel-switch.git",
+                "reference": "91f9b2a7149bcc2564d68e3decb5771287105620"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bezhanSalleh/filament-panel-switch/zipball/91f9b2a7149bcc2564d68e3decb5771287105620",
+                "reference": "91f9b2a7149bcc2564d68e3decb5771287105620",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.0",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.9",
+                "orchestra/testbench": "^8.0",
+                "pestphp/pest": "^2.0",
+                "pestphp/pest-plugin-arch": "^2.0",
+                "pestphp/pest-plugin-laravel": "^2.0",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "BezhanSalleh\\PanelSwitch\\PanelSwitchServiceProvider"
+                    ],
+                    "aliases": {
+                        "PanelSwitch": "BezhanSalleh\\PanelSwitch\\Facades\\PanelSwitch"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BezhanSalleh\\PanelSwitch\\": "src/",
+                    "BezhanSalleh\\PanelSwitch\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bezhan Salleh",
+                    "email": "bezhan_salleh@yahoo.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Easily Switch between your Filament Panels",
+            "homepage": "https://github.com/bezhansalleh/filament-panel-switch",
+            "keywords": [
+                "bezhanSalleh",
+                "filament",
+                "filament-panel-switch",
+                "panel-changer",
+                "panel-navigation",
+                "panel-switch"
+            ],
+            "support": {
+                "issues": "https://github.com/bezhansalleh/filament-panel-switch/issues",
+                "source": "https://github.com/bezhansalleh/filament-panel-switch"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/bezhanSalleh",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-08-07T23:51:12+00:00"
         },
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -10655,5 +10733,5 @@
         "php": "^8.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
