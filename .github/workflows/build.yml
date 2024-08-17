@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read                # 'read' access to repository contents
+  contents: write
 
 jobs:
   laravel-tests-build-release:
