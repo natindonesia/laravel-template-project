@@ -5,6 +5,7 @@ on:
   push:
     branches-ignore:
       - main
+      - dependabot/**
   workflow_dispatch:
 
 
@@ -14,15 +15,15 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+      - uses: shivammathur/setup-php@15b611248c3d140461e97b2eb10de461ca9ec5a3
         with:
           php-version: '8.3'
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
       - name: Cache composer
-        uses: actions/cache@v3.3.2
+        uses: actions/cache@v4
         id: composer-cache
         with:
           path: vendor-normal
@@ -33,7 +34,7 @@ jobs:
         if: steps.composer-cache.outputs.cache-hit == 'true'
         run: cp -r vendor-normal vendor
       - name: Cache npm dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         id: npm-cache
         with:
           path: 'node_modules'
@@ -41,7 +42,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-node-modules-
       - name: Cache npm home
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         id: npm-home
         with:
           path: '~/.npm'
@@ -82,7 +83,7 @@ jobs:
       - name: Clear vendor
         run: rm -rf vendor
       - name: Cache composer production
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         id: composer-cache-production
         with:
           path: vendor-prod
@@ -106,13 +107,3 @@ jobs:
         run: |
           php artisan migrate:refresh --seed --force
           php artisan migrate:refresh --force
-      - uses: sonarsource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      # If you wish to fail your job when the Quality Gate is red, uncomment the
-      # following lines. This would typically be used to fail a deployment.
-      # - uses: sonarsource/sonarqube-quality-gate-action@master
-      #   timeout-minutes: 5
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

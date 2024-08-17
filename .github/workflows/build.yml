@@ -15,15 +15,16 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+      - uses: shivammathur/setup-php@15b611248c3d140461e97b2eb10de461ca9ec5a3
         with:
           php-version: '8.3'
-      - uses: actions/checkout@v3
+          coverage: xdebug
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
       - name: Cache composer
-        uses: actions/cache@v3.3.2
+        uses: actions/cache@v4
         id: composer-cache
         with:
           path: vendor
@@ -31,7 +32,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
       - name: Cache npm dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         id: npm-cache
         with:
           path: 'node_modules'
@@ -39,7 +40,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-node-modules-
       - name: Cache npm home
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         id: npm-home
         with:
           path: '~/.npm'
@@ -72,8 +73,10 @@ jobs:
       - name: Build with Vite
         run: npm run build
 
-      - name: Execute tests (Unit and Feature tests) via Pest
-        run: php artisan test
+      - name: Execute tests (Unit and Feature tests)
+        env:
+          XDEBUG_MODE: coverage
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
 
       - uses: sonarsource/sonarqube-scan-action@master
         env:
@@ -104,7 +107,7 @@ jobs:
         run: zip -r "${{ github.event.repository.name }}.zip" .
 
       - name: Upload built file
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: "${{ github.event.repository.name }}.zip"
           path: "${{ github.event.repository.name }}.zip"
