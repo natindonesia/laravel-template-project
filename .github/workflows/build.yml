@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: shivammathur/setup-php@e77cdb393f70751e0417891f9ae9de6a41096210
+      - uses: shivammathur/setup-php@19ba822314c230a9039afce40e65d6c2b352ebfb
         with:
           php-version: '8.3'
           coverage: xdebug
