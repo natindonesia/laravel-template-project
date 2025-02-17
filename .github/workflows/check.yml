@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: shivammathur/setup-php@ad03a92562b96b77b640b366a2b379a4971d1107
+      - uses: shivammathur/setup-php@d8af2f43ce846ab2abc7274f8d18fd10dc5a1345
         with:
           php-version: '8.3'
       - uses: actions/checkout@v4
