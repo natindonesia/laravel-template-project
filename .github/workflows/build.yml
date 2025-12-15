@@ -24,7 +24,7 @@ jobs:
           submodules: recursive
           fetch-depth: 0
       - name: Cache composer
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: composer-cache
         with:
           path: vendor
@@ -32,7 +32,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
       - name: Cache npm dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: npm-cache
         with:
           path: 'node_modules'
@@ -40,7 +40,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-node-modules-
       - name: Cache npm home
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: npm-home
         with:
           path: '~/.npm'
