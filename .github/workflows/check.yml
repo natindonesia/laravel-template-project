@@ -23,7 +23,7 @@ jobs:
           submodules: recursive
           fetch-depth: 0
       - name: Cache composer
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: composer-cache
         with:
           path: vendor-normal
@@ -34,7 +34,7 @@ jobs:
         if: steps.composer-cache.outputs.cache-hit == 'true'
         run: cp -r vendor-normal vendor
       - name: Cache npm dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: npm-cache
         with:
           path: 'node_modules'
@@ -42,7 +42,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-node-modules-
       - name: Cache npm home
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: npm-home
         with:
           path: '~/.npm'
@@ -83,7 +83,7 @@ jobs:
       - name: Clear vendor
         run: rm -rf vendor
       - name: Cache composer production
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: composer-cache-production
         with:
           path: vendor-prod
